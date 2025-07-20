@@ -1,4 +1,5 @@
 function validate() {
+    // Get input values
     const firstName = document.getElementById("firstName").value.trim();
     const lastName = document.getElementById("check").value.trim();
     const email = document.getElementById("email").value.trim();
@@ -6,53 +7,49 @@ function validate() {
     const phoneNumber = document.getElementById("phn").value.trim();
     const date = document.getElementById("date").value;
 
-    if (!firstName || !lastName || !email || !areaCode || !phoneNumber || !date) {
-        alert("All fields are required.");
-        return false;
-    }
+    // Reset all error labels
+    document.querySelectorAll("label[style*='color: red']").forEach(label => {
+        label.style.visibility = "hidden";
+    });
 
-    if (isNaN(areaCode) || isNaN(phoneNumber)) {
-        alert("Phone fields must contain only numbers.");
-        return false;
-    }
-
-    return true; // allow form to submit
-}
-
-
-
-function validate() {
-    var email = document.getElementById('email').value.trim();
-    var phone = document.getElementById('pno').value.trim();
-    var emailMsg = document.getElementById('check');
-    var phoneMsg = document.getElementById('phn');
-
-    var emailRegex = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/;
-    var phoneRegex = /^[6-9]\d{9}$/;
-
+    // Validation flags
     let isValid = true;
 
-    // Email validation
-    if (emailRegex.test(email)) {
-        emailMsg.innerHTML = "Valid email";
-        emailMsg.style.color = "green";
-    } else {
-        emailMsg.innerHTML = "Invalid email";
-        emailMsg.style.color = "red";
+    // Email regex from the second function
+    const emailRegex = /^([a-zA-Z0-9._-]+)@([a-zA-Z0-9-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/;
+    // Phone regex for a 10-digit number starting with 6-9
+    const phoneRegex = /^[6-9]\d{9}$/;
+
+    // Check required fields
+    if (!firstName || !lastName) {
+        document.querySelector("label[for='firstName']").style.visibility = "visible";
         isValid = false;
     }
 
-    // Phone validation
-    if (phoneRegex.test(phone)) {
-        phoneMsg.innerHTML = "Valid phone";
-        phoneMsg.style.color = "green";
-    } else {
-        phoneMsg.innerHTML = "Invalid phone";
-        phoneMsg.style.color = "red";
+    // Check email
+    if (!emailRegex.test(email)) {
+        document.querySelector("label[for='email']").style.visibility = "visible";
         isValid = false;
     }
 
-    return isValid; // return true only if both are valid
+    // Check phone number (validate phoneNumber, not areaCode, with phoneRegex)
+    if (!phoneRegex.test(phoneNumber)) {
+        document.querySelector("label[for='phn']").style.visibility = "visible";
+        isValid = false;
+    }
+
+    // Check area code (optional: only validate if provided)
+    if (areaCode && isNaN(areaCode)) {
+        document.querySelector("label[for='phn']").style.visibility = "visible";
+        isValid = false;
+    }
+
+    // Check date
+    if (!date) {
+        document.querySelector("label[for='date']").style.visibility = "visible";
+        isValid = false;
+    }
+
+    return isValid; // Return true to submit, false to block
 }
-
 
